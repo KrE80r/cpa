@@ -357,7 +357,7 @@ Arguments: `+Array.prototype.slice.call(C).join("")+`
                 </tbody>
             </table>
         `;let i=this.elements;this._share&&i.shareLink.classList.remove("hidden"),this._json&&i.json.classList.remove("hidden"),this._json&&i.csv.classList.remove("hidden"),this._chart&&i.enableChart.classList.remove("hidden"),i.json.addEventListener("click",s=>{s.preventDefault(),this.model&&this.download(this.model.filteredItems,!0)}),i.csv.addEventListener("click",s=>{s.preventDefault(),this.model&&this.download(this.model.filteredItems)}),i.enableChart.addEventListener("x-change",()=>{i.enableChart.checked?i.chart.classList.remove("hidden"):i.chart.classList.add("hidden")}),this._showAllPriceHistories=!1,i.expandPriceHistories.addEventListener("click",()=>{let s=this._showAllPriceHistories=!this._showAllPriceHistories;i.expandPriceHistories.innerText=Ns("ItemsList_Preis")+(s?" \u25B2":" \u25BC"),i.tableBody.querySelectorAll(".priceinfo").forEach(r=>s?r.classList.remove("hidden"):r.classList.add("hidden"))}),i.chart.unitPrice=i.unitPrice.checked,i.unitPrice.addEventListener("change",()=>{i.chart.unitPrice=i.unitPrice.checked,i.chart.render()}),i.salesPrice.addEventListener("change",()=>{i.chart.unitPrice=i.unitPrice.checked,i.chart.render()}),this.setupEventHandlers(),this.addEventListener("x-change",s=>{if(this._ignoreChange){this._ignoreChange=!1;return}this.render()})}set model(t){super.model=t,this.elements.chart.model=t}get model(){return super.model}download(t,i){let s=[];t.forEach(r=>{s.push({store:r.store,id:r.id,name:r.name,category:r.category,price:r.price,priceHistory:r.priceHistory,isWeighted:r.isWeighted,unit:r.unit,quantity:r.quantity,bio:r.bio,available:!(r.unavailable??!1),url:S3[r.store].getUrl(r)})}),i?Jy("items.json",s):Xy("items.csv",i_(s))}sort(t){let i=this.elements.sort.value;return i=="price-asc"?this.elements.salesPrice.checked?t.sort((s,r)=>s.price-r.price):t.sort((s,r)=>s.unitPrice-r.unitPrice):i=="price-desc"?this.elements.salesPrice.checked?t.sort((s,r)=>r.price-s.price):t.sort((s,r)=>r.salesPrice-s.salesPrice):i=="quantity-asc"?t.sort((s,r)=>s.unit!=r.unit?s.unit.localeCompare(r.unit):s.quantity-r.quantity):i=="quantity-desc"?t.sort((s,r)=>s.unit!=r.unit?s.unit.localeCompare(r.unit):r.quantity-s.quantity):i=="store-and-name"?t.sort((s,r)=>s.store<r.store?-1:s.store>r.store?1:s.name<r.name?-1:s.name>r.name?1:0):(n_(t),t=s_(t)),t}highlightMatches(t,i){let s=i;for(let r=0;r<t.length;r++){let a=t[r],o=new RegExp(a,"gi");s=s.replace(o,"<strong>$&</strong>")}return`${s}`}renderItem(t){this._itemTemplate||(this._itemTemplate=Ky("tr",`
-                <td x-id="store" data-label="Store"></td>
+                <td x-id="store" data-label="Kette"></td>
                 <td data-label="Name">
                     <div class="flex items-center">
                         <a x-id="name" target="_blank" class="hover:underline" rel="noopener noreferrer nofollow" href=""></a>
@@ -366,13 +366,13 @@ Arguments: `+Array.prototype.slice.call(C).join("")+`
                     <table x-id="priceHistory" class="priceinfo hidden" aria-hidden="true">
                     </table>
                 </td>
-                <td data-label="Price">
+                <td data-label="Preis">
                     <span x-id="price"></span>
                     <span x-id="percentageChange"></span>
                     <span x-id="numPrices"></span>
                     <span class="chevron">\u25BC</span>
                 </td>
-                <td data-label="Action">
+                <td data-label="action">
                     <span class="action">
                         <label x-id="chart" class="${this._chart?"":"hidden"}">
                             <input x-id="chartCheckbox" type="checkbox" class="hidden peer">
