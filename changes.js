@@ -366,7 +366,7 @@ Arguments: `+Array.prototype.slice.call(C).join("")+`
                     <table x-id="priceHistory" class="priceinfo hidden" aria-hidden="true">
                     </table>
                 </td>
-                <td data-label="Price">
+                <td data-label="Preis">
                     <span x-id="price"></span>
                     <span x-id="percentageChange"></span>
                     <span x-id="numPrices"></span>
