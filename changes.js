@@ -372,7 +372,7 @@ Arguments: `+Array.prototype.slice.call(C).join("")+`
                     <span x-id="numPrices"></span>
                     <span class="chevron">\u25BC</span>
                 </td>
-                <td data-label="action">
+                <td data-label="actions">
                     <span class="action">
                         <label x-id="chart" class="${this._chart?"":"hidden"}">
                             <input x-id="chartCheckbox" type="checkbox" class="hidden peer">
