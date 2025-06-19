@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full w-full">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Non-commercial open source project to enable consumers to find the cheapest version of a product in stores." />
+        <title>جهاز حماية المستهلك - أديليد</title>
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22></text></svg>"
+        />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+
+    <body class="w-full min-h-full flex flex-col">
+        <div class="max-w-6xl mx-auto lg:py-4 flex flex-col flex-1 w-full">
+            <h2 class="bg-primary lg:rounded-t-xl text-center text-white p-3 uppercase text-2xl font-bold"> جهاز حماية المستهلك - أديليد </h2>
+ <div class="flex justify-center gap-4 py-2 font-bold text-primary border border-primary/50 lg:rounded-b-xl">
+    <a href="index.html">Search</a>
+    <a href="changes.html">Price changes</a>
+    <a href="shopping-list.html">Shopping List</a>
+</div>
+
+<div class="w-full relative px-3 sm:px-4 flex-grow">
+    <!-- Mobile-friendly header -->
+    <div class="text-center py-4 sm:py-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">Smart Shopping List</h1>
+        <p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Find alternatives and save money across stores</p>
+        
+        <!-- Cart Selector Component with Import/Export -->
+        <div class="max-w-2xl mx-auto mb-6">
+            <cart-selector x-id="cartSelector" class="block mb-4"></cart-selector>
+            
+            <!-- Import/Export buttons prominently placed near cart selector -->
+            <div class="flex justify-center gap-3">
+                <button x-id="mainImportBtn" class="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
+                    📥 Import Shopping List
+                </button>
+                <button x-id="mainExportBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
+                    📤 Export Shopping List
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty state -->
+    <div x-id="noItems" class="hidden block text-center my-6 sm:my-8 p-6 sm:p-8 bg-gray-50 rounded-lg">
+        <div class="text-3xl sm:text-4xl mb-3 sm:mb-4">🛒</div>
+        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Your shopping list is empty</h3>
+        <p class="text-sm sm:text-base text-gray-600 mb-4">Search for products below and add them to your list</p>
+        
+        
+        <div class="text-xs sm:text-sm text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-200">
+            💡 After adding items, tap "Add Alternative" to find better deals at other stores!
+        </div>
+    </div>
+
+    <!-- Enhanced Cart Items Container -->
+    <div x-id="enhancedCartContainer" class="hidden mb-6 sm:mb-8">
+        <!-- Mobile-first shopping list layout -->
+        <div class="sm:hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Your Shopping List</h2>
+                <div class="flex items-center gap-2">
+                    <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountMobile">0 items</div>
+                    <button x-id="mobileExportBtn" class="text-xs px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" title="Export list">
+                        📤
+                    </button>
+                    <button x-id="mobileImportBtn" class="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors" title="Import list">
+                        📥
+                    </button>
+                </div>
+            </div>
+            <div x-id="mobileShoppingCards" class="space-y-3">
+                <!-- Mobile shopping cards will be rendered here -->
+            </div>
+        </div>
+        
+        <!-- Desktop split layout: Shopping list + Alternative panel -->
+        <div class="hidden sm:flex gap-6">
+            <!-- Left: Shopping list (60%) -->
+            <div class="flex-1 w-3/5">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-900">Your Shopping List</h2>
+                    <div class="flex items-center gap-4">
+                        <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountDesktop">0 items</div>
+                        <div class="flex items-center gap-2">
+                            <button x-id="desktopExportBtn" class="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-1" title="Export shopping list">
+                                📤 <span class="hidden md:inline">Export</span>
+                            </button>
+                            <button x-id="desktopImportBtn" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors flex items-center gap-1" title="Import shopping list">
+                                📥 <span class="hidden md:inline">Import</span>
+                            </button>
+                        </div>
+                        <button class="text-xs text-blue-600 hover:text-blue-800" onclick="alert('Click any item to manage alternatives in the side panel. No more scrolling!')">
+                            ❓ How it works
+                        </button>
+                    </div>
+                </div>
+                <div x-id="desktopShoppingCards" class="space-y-3">
+                    <!-- Desktop shopping cards will be rendered here -->
+                </div>
+            </div>
+            
+            <!-- Right: Alternative management panel (40%) -->
+            <div class="w-2/5 bg-white border border-gray-200 rounded-lg shadow-sm">
+                <alternative-panel x-id="alternativePanel"></alternative-panel>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile-friendly Product Search - moved here for better UX -->
+    <div class="mb-6 sm:mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+            <span class="text-green-600">🔍</span>
+            Add Products to Your List
+        </h3>
+        <items-filter
+            x-id="productsFilter"
+            stores
+            misc
+            nochartclear
+            placeholder="Search for products (e.g. milk, bread, eggs)..."
+            class="mb-3 sm:mb-4"
+        ></items-filter>
+        <items-list x-id="productsList" add multiselect class="mobile-product-list"></items-list>
+    </div>
+
+    <!-- Enhanced Cost Summary Component -->
+    <cost-summary x-id="costSummaryComponent" class="hidden"></cost-summary>
+
+    <!-- Shopping Strategy Component (New Foldable Boxes Interface) -->
+    <shopping-strategy x-id="shoppingStrategyComponent" class="hidden"></shopping-strategy>
+
+    <!-- Legacy Cost Summary (kept for backward compatibility) -->
+    <div x-id="costSummary" class="hidden mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+        <h3 class="text-lg font-semibold text-blue-900 mb-4">Cost Summary</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+            <div class="text-center">
+                <div class="text-2xl font-bold text-blue-700" x-id="currentTotal">$0.00</div>
+                <div class="text-sm text-blue-600">Current Selection</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-green-700" x-id="bestTotal">$0.00</div>
+                <div class="text-sm text-green-600">Best Possible</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-purple-700" x-id="potentialSavings">$0.00</div>
+                <div class="text-sm text-purple-600">Potential Savings</div>
+            </div>
+        </div>
+    </div>
+
+    <div x-id="loader" class="progress-bar-container mx-auto mt-8">
+    <div class="progress-bar"></div>
+</div>
+
+
+    
+    <!-- Alternative Search Modal (hidden by default) -->
+    <alternative-search x-id="alternativeSearchModal" class="hidden"></alternative-search>
+    
+    <!-- Hidden file input for import functionality -->
+    <input type="file" x-id="importFileInput" accept=".json" class="hidden">
+</div>
+
+<!-- Development Test Section (remove in production) -->
+<div id="devTestSection" class="hidden fixed bottom-4 right-4 p-2 bg-gray-800 text-white text-xs rounded shadow-lg">
+    <button id="testIntegration" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs">
+        Test Integration
+    </button>
+</div>
+
+<script src="shopping-list.js"></script>
+
+<footer>
+    <div class="flex align-center justify-center gap-2 pt-4">
+        <a class="font-medium" href="settings.html">Settings</a>
+    </div>
+    <div class="flex align-center justify-center gap-2 pt-4 pb-2">
+        <span>A fork of <a href="https://github.com/badlogic/heissepreise">heissepreise</a></span>
+    </div>
+    <small class="text-center mb-6">
+        <p>All information provided without guarantee, errors excepted.<br />
+            Brand names and trademarks are the property of their respective owners.
+        </p>
+    </small>
+</footer>
+</body>
+
+</html> 

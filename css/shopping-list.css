@@ -1,0 +1,247 @@
+/* Enhanced Shopping List Styles */
+
+/* Shopping Strategy Store Breakdown */
+.store-breakdown-toggle {
+    cursor: pointer;
+}
+
+.store-breakdown-toggle:hover {
+    background-color: #f3f4f6;
+}
+
+.store-breakdown-arrow {
+    transition: transform 0.2s ease;
+}
+
+.store-breakdown-details {
+    animation: slideDown 0.3s ease-out;
+}
+
+.store-breakdown-details.hidden {
+    display: none;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.store-items-section {
+    transition: all 0.2s ease;
+}
+
+.store-items-section:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Shopping Card Component */
+.shopping-card {
+    @apply block w-full;
+}
+
+.shopping-card__content {
+    transition: all 0.2s ease;
+}
+
+.shopping-card:hover .shopping-card__content {
+    @apply shadow-md;
+}
+
+/* Highlighted state for desktop cards */
+.shopping-card--highlighted .shopping-card__content {
+    @apply ring-2 ring-blue-500 shadow-lg;
+}
+
+/* Mobile-specific card styles */
+@media (max-width: 767px) {
+    .shopping-card__content {
+        @apply shadow-sm;
+    }
+    
+    .shopping-card:active .shopping-card__content {
+        @apply shadow-md scale-98;
+        transition: all 0.1s ease;
+    }
+}
+
+/* Desktop-specific card styles */
+@media (min-width: 768px) {
+    .shopping-card__content {
+        @apply cursor-pointer;
+    }
+    
+    .shopping-card:hover .shopping-card__content {
+        @apply shadow-md transform translate-y-[-1px];
+    }
+    
+    .shopping-card--highlighted .shopping-card__content {
+        @apply shadow-lg transform translate-y-[-1px];
+    }
+}
+
+/* Alternative Panel Component */
+.alternative-panel {
+    @apply h-full;
+}
+
+.alternative-panel__content {
+    @apply h-full;
+    min-height: 400px;
+}
+
+.alternative-panel__header {
+    flex-shrink: 0;
+}
+
+.alternative-panel__selection {
+    flex-shrink: 0;
+}
+
+.alternative-panel__search {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Alternative option hover states */
+.alternative-option:hover {
+    @apply bg-gray-50;
+}
+
+.alternative-option input[type="radio"]:checked + * {
+    @apply text-green-700;
+}
+
+/* Search result hover states */
+.search-result-item:hover {
+    @apply bg-gray-50;
+}
+
+.search-result-item:active {
+    @apply bg-gray-100;
+    transition: background-color 0.1s ease;
+}
+
+/* Mobile alternative management styles */
+@media (max-width: 767px) {
+    .alternative-panel {
+        display: none !important;
+    }
+}
+
+/* Desktop layout adjustments */
+@media (min-width: 768px) {
+    .alternative-panel {
+        position: sticky;
+        top: 1rem;
+        height: calc(100vh - 2rem);
+        overflow: hidden;
+    }
+    
+    .alternative-panel__search {
+        max-height: calc(100vh - 300px);
+    }
+}
+
+/* Utility classes for shopping cards */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Store indicator animations */
+.shopping-card__content [style*="border-radius: 50%"] {
+    transition: all 0.2s ease;
+}
+
+.shopping-card:hover [style*="border-radius: 50%"] {
+    transform: scale(1.1);
+}
+
+/* Button hover states */
+.shopping-card button {
+    transition: all 0.2s ease;
+}
+
+.shopping-card button:hover {
+    transform: translateY(-1px);
+}
+
+.shopping-card button:active {
+    transform: translateY(0);
+}
+
+/* Alternative count badge animation */
+.shopping-card [class*="rounded-full"]:not(button) {
+    transition: all 0.2s ease;
+}
+
+.shopping-card:hover [class*="rounded-full"]:not(button) {
+    transform: scale(1.05);
+}
+
+/* Desktop side panel responsive adjustments */
+@media (min-width: 1200px) {
+    .alternative-panel__search {
+        max-height: calc(100vh - 280px);
+    }
+}
+
+/* Focus states for accessibility */
+.shopping-card:focus-within .shopping-card__content {
+    @apply ring-2 ring-blue-500;
+}
+
+.alternative-panel button:focus,
+.alternative-panel input:focus,
+.alternative-panel select:focus {
+    @apply ring-2 ring-blue-500;
+}
+
+/* Loading states */
+.shopping-card.loading {
+    @apply opacity-50 pointer-events-none;
+}
+
+.alternative-panel.loading {
+    @apply opacity-50;
+}
+
+/* Empty state styles */
+.alternative-panel__empty {
+    @apply flex flex-col items-center justify-center h-full;
+    min-height: 300px;
+}
+
+/* Mobile toast notification positioning */
+@media (max-width: 767px) {
+    .fixed.top-4.left-1\/2 {
+        left: 1rem;
+        right: 1rem;
+        transform: translateX(0);
+        max-width: calc(100vw - 2rem);
+    }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+    transition: background-color 0.2s ease, 
+                border-color 0.2s ease, 
+                color 0.2s ease, 
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+/* Override for elements that shouldn't have transitions */
+input[type="radio"],
+input[type="checkbox"] {
+    transition: none;
+}
