@@ -60,9 +60,9 @@
     </div>
 
     <!-- Enhanced Cart Items Container -->
-    <div x-id="enhancedCartContainer" class="hidden mb-6 sm:mb-8">
+    <div x-id="enhancedCartContainer" class="mb-6 sm:mb-8">
         <!-- Mobile-first shopping list layout -->
-        <div class="sm:hidden">
+        <div class="hidden">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-2">
                     <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountMobile">0 items</div>
@@ -74,39 +74,40 @@
                     </button>
                 </div>
             </div>
-            <div x-id="mobileShoppingCards" class="space-y-3">
-                <!-- Mobile shopping cards will be rendered here -->
+            <!-- Mobile Collapsible Shopping Lists Container -->
+            <div x-id="mobileShoppingListsContainer" class="space-y-4">
+                <!-- Mobile collapsible shopping lists will be rendered here -->
+            </div>
+            <!-- Legacy mobile container for backward compatibility -->
+            <div x-id="mobileShoppingCards" class="space-y-3 hidden">
+                <!-- Legacy mobile shopping cards will be rendered here -->
             </div>
         </div>
         
-        <!-- Desktop split layout: Shopping list + Alternative panel -->
-        <div class="hidden sm:flex gap-6">
-            <!-- Left: Shopping list (60%) -->
+        <!-- Desktop split layout: Shopping lists + Alternative panel -->
+        <div class="flex gap-6">
+            <!-- Left: Shopping lists (60%) -->
             <div class="flex-1 w-3/5">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-900">Your Shopping List</h2>
+                    <h2 class="text-xl font-semibold text-gray-900">Your Shopping Lists</h2>
                     <div class="flex items-center gap-4">
-                        <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountDesktop">0 items</div>
-                        <div class="flex items-center gap-2">
-                            <button x-id="desktopExportBtn" class="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-1" title="Export shopping list">
-                                📤 <span class="hidden md:inline">Export</span>
-                            </button>
-                            <button x-id="desktopImportBtn" class="text-xs px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors flex items-center gap-1" title="Import shopping list">
-                                📥 <span class="hidden md:inline">Import</span>
-                            </button>
-                        </div>
                         <button class="text-xs text-blue-600 hover:text-blue-800" onclick="alert('Click any item to manage alternatives in the side panel. No more scrolling!')">
                             ❓ How it works
                         </button>
                     </div>
                 </div>
-                <div x-id="desktopShoppingCards" class="space-y-3">
-                    <!-- Desktop shopping cards will be rendered here -->
+                <!-- Desktop Collapsible Shopping Lists Container -->
+                <div x-id="desktopShoppingListsContainer" class="space-y-4">
+                    <!-- Desktop collapsible shopping lists will be rendered here -->
+                </div>
+                <!-- Legacy desktop container for backward compatibility -->
+                <div x-id="desktopShoppingCards" class="space-y-3 hidden">
+                    <!-- Legacy desktop shopping cards will be rendered here -->
                 </div>
             </div>
             
             <!-- Right: Alternative management panel (40%) -->
-            <div class="w-2/5 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div x-id="alternativePanelContainer" class="w-2/5 bg-white border border-gray-200 rounded-lg shadow-sm" style="display: none;">
                 <alternative-panel x-id="alternativePanel"></alternative-panel>
             </div>
         </div>
@@ -170,6 +171,69 @@
         Test Integration
     </button>
 </div>
+
+<style>
+/* Collapsible Cart Styling */
+.collapsible-cart {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.cart-header {
+    cursor: pointer;
+    padding: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.cart-header:hover {
+    background-color: #f9fafb;
+}
+
+/* Collapsible Cart Transitions */
+.cart-items-container {
+    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+.cart-items-container.hidden {
+    max-height: 0;
+    opacity: 0;
+}
+
+.chevron-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out;
+    color: #6b7280; /* gray-500 */
+}
+
+.chevron-icon svg {
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Collapsed state: right-pointing chevron (0 degrees) */
+.collapsible-cart[data-collapsed="true"] .chevron-icon svg {
+    transform: rotate(0deg);
+}
+
+/* Expanded state: down-pointing chevron (90 degrees) */
+.collapsible-cart[data-collapsed="false"] .chevron-icon svg {
+    transform: rotate(90deg);
+}
+
+/* Mobile-friendly touch targets */
+@media (max-width: 640px) {
+    .cart-header {
+        min-height: 60px;
+    }
+    
+    .cart-export-btn, .cart-delete-btn {
+        min-width: 32px;
+        min-height: 32px;
+    }
+}
+</style>
 
 <script src="shopping-list.js"></script>
 
