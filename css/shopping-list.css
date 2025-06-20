@@ -229,6 +229,193 @@
         transform: translateX(0);
         max-width: calc(100vw - 2rem);
     }
+    
+    /* Reduce mobile padding and spacing */
+    .w-full.relative.px-3 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    /* Compact header */
+    .text-center.py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    .text-2xl.font-bold.mb-2 {
+        margin-bottom: 0.5rem !important;
+        font-size: 1.5rem !important;
+    }
+    
+    .text-sm.text-gray-600.mb-4 {
+        margin-bottom: 1rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    /* Compact cart selector */
+    .max-w-2xl.mx-auto.mb-6 {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Compact import/export buttons */
+    .flex.justify-center.gap-3 {
+        gap: 0.5rem !important;
+    }
+    
+    .flex.items-center.gap-2.px-4.py-2 {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    /* Compact search section */
+    .mb-6.sm\\:mb-8 {
+        margin-bottom: 1rem !important;
+    }
+    
+    .text-base.font-semibold.mb-3 {
+        margin-bottom: 0.75rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Compact filter buttons and inputs */
+    .items-filter {
+        padding: 0.75rem !important;
+        margin-top: 0 !important;
+    }
+    
+    /* Compact store filter buttons */
+    .items-filter .customcheckbox {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.5rem !important;
+        margin: 0.125rem !important;
+    }
+    
+    /* Compact search input */
+    .items-filter input[type="text"], 
+    .items-filter input[type="search"] {
+        padding: 0.5rem !important;
+        font-size: 0.875rem !important;
+        height: 2.5rem !important;
+        line-height: 1.25 !important;
+    }
+    
+    /* Compact main search bar */
+    input[placeholder*="Search for products"] {
+        padding: 0.75rem !important;
+        font-size: 0.875rem !important;
+        height: 2.75rem !important;
+    }
+    
+    /* Compact price filters */
+    .items-filter input[type="number"] {
+        padding: 0.375rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    /* Compact filter labels */
+    .items-filter label {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Compact filter sections */
+    .items-filter > div {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Compact filter toggles */
+    .wrapper--search {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .wrapper--sticky {
+        padding: 0.5rem !important;
+        gap: 0.5rem !important;
+    }
+    
+    /* Compact mobile shopping list header */
+    .flex.justify-between.items-center.mb-4 {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .text-sm.text-gray-600.px-2.py-1 {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .text-xs.px-2.py-1 {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.65rem !important;
+    }
+    
+    /* Compact shopping cards */
+    .space-y-3 {
+        gap: 0.5rem !important;
+    }
+    
+    /* Compact empty state */
+    .text-center.my-6.p-6 {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        padding: 1rem !important;
+    }
+    
+    .text-3xl.mb-3 {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .text-base.font-medium.mb-2 {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .text-sm.text-gray-600.mb-4 {
+        font-size: 0.8rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Compact shopping list items */
+    .shopping-card .shopping-card__content {
+        padding: 0.75rem !important;
+    }
+    
+    .shopping-card .shopping-card__content > div:first-child {
+        gap: 0.5rem !important;
+    }
+    
+    /* Compact product titles */
+    .shopping-card h3 {
+        font-size: 0.9rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    /* Compact product details */
+    .shopping-card .text-sm {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Compact price display */
+    .shopping-card .font-bold {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Compact action buttons */
+    .shopping-card button {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    /* Compact alternative count badge */
+    .shopping-card [class*="rounded-full"] {
+        font-size: 0.65rem !important;
+        padding: 0.125rem 0.375rem !important;
+    }
+    
+    /* Compact store indicators */
+    .shopping-card [style*="border-radius: 50%"] {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
 }
 
 /* Smooth transitions for all interactive elements */

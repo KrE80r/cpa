@@ -1228,12 +1228,12 @@ Arguments: `+Array.prototype.slice.call(I).join("")+`
                     <div class="mt-4 pt-3 border-t border-gray-100">
                         <h4 class="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">Available Options:</h4>
                         <div class="space-y-2">
-                            <!-- Selected Option -->
-                            <div class="alternative-option-card selected" data-index="${t}" data-selection="main">
-                                <div class="flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 border-green-500 bg-green-50">
+                            <!-- Main Option -->
+                            <div class="alternative-option-card ${(e.selected||"main")==="main"?"selected":""}" data-index="${t}" data-selection="main">
+                                <div class="flex items-center justify-between p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${(e.selected||"main")==="main"?"border-green-500 bg-green-50":"border-gray-200 hover:border-gray-300 bg-white"}">
                                     <div class="flex items-center gap-3">
-                                        <div class="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white">
-                                            \u2713
+                                        <div class="flex items-center justify-center w-6 h-6 rounded-full ${(e.selected||"main")==="main"?"bg-green-500 text-white":"bg-gray-200 text-gray-500"}">
+                                            ${(e.selected||"main")==="main"?"\u2713":""}
                                         </div>
                                         <div>
                                             <div class="flex items-center gap-2">

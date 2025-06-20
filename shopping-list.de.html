@@ -44,6 +44,9 @@
         </div>
     </div>
 
+    <!-- Shopping Strategy Component (positioned at top for immediate visibility of savings) -->
+    <shopping-strategy x-id="shoppingStrategyComponent" class="hidden mb-6 sm:mb-8"></shopping-strategy>
+
     <!-- Empty state -->
     <div x-id="noItems" class="hidden block text-center my-6 sm:my-8 p-6 sm:p-8 bg-gray-50 rounded-lg">
         <div class="text-3xl sm:text-4xl mb-3 sm:mb-4">🛒</div>
@@ -61,7 +64,6 @@
         <!-- Mobile-first shopping list layout -->
         <div class="sm:hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">Your Shopping List</h2>
                 <div class="flex items-center gap-2">
                     <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountMobile">0 items</div>
                     <button x-id="mobileExportBtn" class="text-xs px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" title="Export list">
@@ -129,9 +131,6 @@
 
     <!-- Enhanced Cost Summary Component -->
     <cost-summary x-id="costSummaryComponent" class="hidden"></cost-summary>
-
-    <!-- Shopping Strategy Component (New Foldable Boxes Interface) -->
-    <shopping-strategy x-id="shoppingStrategyComponent" class="hidden"></shopping-strategy>
 
     <!-- Legacy Cost Summary (kept for backward compatibility) -->
     <div x-id="costSummary" class="hidden mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
