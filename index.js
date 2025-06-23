@@ -360,10 +360,12 @@ Arguments: `+Array.prototype.slice.call(O).join("")+`
                     </table>
                 </td>
                 <td data-label="${_s("ItemsList_Preis")}">
-                    <span x-id="price"></span>
-                    <span x-id="percentageChange"></span>
-                    <span x-id="numPrices"></span>
-                    <span class="chevron">\u25BC</span>
+                    <div class="md:flex md:items-center">
+                        <span x-id="price" class="font-semibold"></span>
+                        <span x-id="percentageChange" class="ml-2"></span>
+                        <span x-id="numPrices" class="ml-1 text-gray-500"></span>
+                        <span class="chevron ml-2 md:ml-1">\u25BC</span>
+                    </div>
                 </td>
                 <td data-label="${_s("ItemsList_Aktionen")}">
                     <span class="action">

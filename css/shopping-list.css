@@ -263,8 +263,7 @@
     }
     
     .flex.items-center.gap-2.px-4.py-2 {
-        padding: 0.375rem 0.75rem !important;
-        font-size: 0.75rem !important;
+        /* Let import/export buttons size naturally */
     }
     
     /* Compact search section */
@@ -283,11 +282,14 @@
         margin-top: 0 !important;
     }
     
-    /* Compact store filter buttons */
+    /* Let buttons size naturally like original heisse-preise */
+    button {
+        /* Remove all forced sizing - use natural button dimensions */
+    }
+    
+    /* Let store filter buttons size naturally */
     .items-filter .customcheckbox {
-        font-size: 0.75rem !important;
-        padding: 0.25rem 0.5rem !important;
-        margin: 0.125rem !important;
+        /* Remove forced sizing - use natural dimensions */
     }
     
     /* Compact search input */
@@ -399,10 +401,9 @@
         font-size: 0.9rem !important;
     }
     
-    /* Compact action buttons */
+    /* Let shopping card buttons size naturally */
     .shopping-card button {
-        padding: 0.375rem 0.75rem !important;
-        font-size: 0.75rem !important;
+        /* Remove forced sizing - use natural button dimensions */
     }
     
     /* Compact alternative count badge */
