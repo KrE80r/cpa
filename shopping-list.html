@@ -23,6 +23,22 @@
 </div>
 
 <div class="w-full max-w-3xl mx-auto px-4 py-8">
+    <!-- Data Persistence Warning -->
+    <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+        <div class="flex-shrink-0 text-blue-600 text-xl">ℹ️</div>
+        <div class="flex-1">
+            <h3 class="font-semibold text-blue-900 mb-1">Local Storage Notice</h3>
+            <div id="storageWarningContent" class="text-sm text-blue-800 space-y-1">
+                <p>Shopping lists are stored locally on this device only.</p>
+            </div>
+            <ul class="text-sm text-blue-700 mt-2 space-y-1 list-disc list-inside">
+                <li>Use the Export function to save lists to other devices</li>
+                <li>Lists will be lost if browser data or cache is cleared</li>
+                <li>Data is not synced across devices or browsers</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold">Shopping Lists</h1>
         <div class="flex gap-2">
