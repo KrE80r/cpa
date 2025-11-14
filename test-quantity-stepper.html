@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantity Stepper Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Quantity Stepper Test</h1>
+
+        <!-- Product Card with Alternative (Expanded View) -->
+        <div class="bg-white rounded-lg shadow-md p-4 space-y-4">
+            <h2 class="font-semibold text-lg">Main Item: Coles White Plain Flour 10kg</h2>
+
+            <!-- Alternative Section -->
+            <div class="border-t pt-4">
+                <p class="text-sm text-gray-600 mb-3">1 alternative</p>
+
+                <!-- Alternative Item with Quantity Stepper -->
+                <div class="flex items-center gap-2 p-2 border border-gray-200 rounded hover:bg-gray-50">
+                    <!-- Image -->
+                    <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-lg">📦</div>
+
+                    <!-- Quantity Stepper (Vertical) -->
+                    <div class="flex flex-col items-center">
+                        <button class="decrement p-1 min-h-[44px] min-w-[44px] bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-bold flex items-center justify-center">
+                            −
+                        </button>
+                        <span class="quantity-value px-2 py-1 font-semibold text-gray-900 min-w-[2rem] text-center" id="qty">2</span>
+                        <button class="increment p-1 min-h-[44px] min-w-[44px] bg-gray-100 hover:bg-gray-200 rounded text-gray-700 font-bold flex items-center justify-center">
+                            +
+                        </button>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs font-medium text-gray-900 truncate">WHITE MILL Gluten Free Plain Flour 750g</div>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="inline-block px-1.5 py-0.5 rounded text-white text-xs bg-blue-600">ALDI</span>
+                            <span class="text-xs font-semibold text-gray-700" id="price">$3.59 × 2 = $7.18</span>
+                        </div>
+                    </div>
+
+                    <!-- Remove Button -->
+                    <button class="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-red-600 hover:bg-red-50 rounded">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-gray-700"><strong>Instructions:</strong></p>
+            <ol class="text-sm text-gray-700 list-decimal ml-5 mt-2 space-y-1">
+                <li>Click [+] to increase quantity</li>
+                <li>Click [−] to decrease quantity (min: 1)</li>
+                <li>Watch the price update in real-time</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const qtyElement = document.getElementById('qty');
+        const priceElement = document.getElementById('price');
+        const unitPrice = 3.59;
+        let quantity = 2;
+
+        function updateDisplay() {
+            qtyElement.textContent = quantity;
+            const total = (unitPrice * quantity).toFixed(2);
+
+            if (quantity > 1) {
+                priceElement.textContent = `$${unitPrice.toFixed(2)} × ${quantity} = $${total}`;
+            } else {
+                priceElement.textContent = `$${unitPrice.toFixed(2)}`;
+            }
+        }
+
+        document.querySelector('.increment').addEventListener('click', () => {
+            quantity++;
+            updateDisplay();
+        });
+
+        document.querySelector('.decrement').addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                updateDisplay();
+            }
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>

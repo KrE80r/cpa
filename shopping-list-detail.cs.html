@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full w-full">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Non-commercial open source project to enable consumers to find the cheapest version of a product in stores." />
+        <title>جهاز حماية المستهلك - أديليد</title>
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22></text></svg>"
+        />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+
+    <body class="w-full min-h-full flex flex-col">
+        <div class="max-w-6xl mx-auto lg:py-4 flex flex-col flex-1 w-full">
+            <h2 class="bg-primary lg:rounded-t-xl text-center text-white p-3 uppercase text-2xl font-bold"> جهاز حماية المستهلك - أديليد </h2>
+ <div class="flex justify-center gap-4 py-2 font-bold text-primary border border-primary/50 lg:rounded-b-xl">
+    <a href="index.html">Search</a>
+    <a href="changes.html">Price changes</a>
+    <a href="shopping-list.html">Nákupní seznamy</a>
+</div>
+
+<div class="w-full max-w-5xl relative px-4 flex-1">
+    <!-- Header with back button and list info -->
+    <div class="flex items-center justify-between py-4 border-b mb-4">
+        <button id="back-btn" class="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="hidden sm:inline">Zpět na seznamy</span>
+        </button>
+
+        <div class="flex-1 text-center mx-4">
+            <h1 id="list-name" class="text-xl sm:text-2xl font-bold text-gray-900"></h1>
+            <div id="store-badges" class="flex items-center justify-center gap-2 mt-1 flex-wrap"></div>
+        </div>
+
+        <div class="flex gap-2">
+            <button id="export-btn" class="px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 flex items-center gap-1" title="Exportovat seznam do JSON">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                <span class="hidden sm:inline">Exportovat</span>
+            </button>
+            <button id="import-btn" class="px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-green-200 flex items-center gap-1" title="Importovat seznam z JSON">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                <span class="hidden sm:inline">Importovat</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center py-12 hidden">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mb-3"></div>
+        <p class="text-gray-600">Načítání produktů...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="hidden text-center py-12">
+        <div class="text-4xl mb-3">⚠️</div>
+        <p id="error-message" class="text-red-600 font-medium"></p>
+    </div>
+
+    <!-- Main Content Container - Single container for all items -->
+    <div id="items-container" class="space-y-3 sm:space-y-4 mb-20 sm:mb-8">
+        <!-- Product cards will be rendered here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-16">
+        <div class="text-6xl mb-4">📝</div>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Zatím žádné položky</h2>
+        <p class="text-gray-600 mb-6">Přidejte položky a začněte vytvářet svůj seznam</p>
+        <button id="add-first-item-btn" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+            + Přidat první položku
+        </button>
+    </div>
+
+    <!-- Shopping Strategies -->
+    <div id="cost-summary-container" class="hidden mt-8 p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div id="cost-breakdown" class="space-y-2">
+            <!-- Shopping strategies will be rendered here -->
+        </div>
+    </div>
+</div>
+
+<!-- Add Item Button - Sticky on mobile, relative on desktop -->
+<button id="add-item-btn" class="fixed bottom-4 right-4 sm:relative sm:bottom-0 sm:right-0 sm:mx-auto sm:block sm:w-48 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full sm:rounded-lg shadow-lg sm:shadow-none font-medium transition-colors flex items-center justify-center gap-2 z-30">
+    <span class="text-lg">+</span>
+    <span>Přidat položku</span>
+</button>
+
+<!-- Feedback Toast -->
+<div id="feedback-toast" class="hidden fixed top-4 left-4 right-4 sm:left-auto sm:w-96 p-4 rounded-lg shadow-lg z-50 transition-opacity">
+    <p id="feedback-message" class="font-medium"></p>
+</div>
+
+<!-- Hidden file input for import -->
+<input type="file" id="import-file-input" accept=".json" class="hidden">
+
+<!-- Alternative Search Modal Component -->
+<alternative-search id="alt-search-modal"></alternative-search>
+
+<div x-id="loader" class="progress-bar-container mx-auto mt-8">
+    <div class="progress-bar"></div>
+</div>
+
+
+
+<script src="shopping-list-detail.js"></script>
+
+<footer>
+    <div class="flex align-center justify-center gap-2 pt-4">
+        <a class="font-medium" href="settings.html">Settings</a>
+    </div>
+    <div class="flex align-center justify-center gap-2 pt-4 pb-2">
+        <span>A fork of <a href="https://github.com/badlogic/heissepreise">heissepreise</a></span>
+    </div>
+    <small class="text-center mb-6">
+        <p>All information provided without guarantee, errors excepted.<br />
+            Brand names and trademarks are the property of their respective owners.
+        </p>
+    </small>
+</footer>
+</body>
+
+</html>

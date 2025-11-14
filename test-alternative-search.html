@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternative Search Modal Test Harness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Animation for toast messages */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Alternative Search Modal Test Harness</h1>
+
+        <!-- Product Card with "Add Alternative" button -->
+        <div class="product-card border rounded-lg p-4 bg-white shadow-sm mb-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-medium">Test Product - Milk 2L</h3>
+                    <p class="text-sm text-gray-600">Woolworths • $4.50</p>
+
+                    <!-- Alternative badge -->
+                    <div data-testid="alt-badge" class="mt-2 text-sm text-blue-600">
+                        <span id="alt-count">0</span> alternatives
+                    </div>
+                </div>
+
+                <button data-testid="add-alternative-btn"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg min-h-[44px]"
+                        onclick="openModal()">
+                    Add Alternative
+                </button>
+            </div>
+        </div>
+
+        <!-- Alternative Search Modal -->
+        <div data-testid="alt-search-modal">
+            <div data-testid="modal-overlay"
+                 class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+
+                <div data-testid="modal-content"
+                     role="dialog"
+                     aria-labelledby="modal-title"
+                     class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col m-4">
+
+                    <!-- Header -->
+                    <div class="p-4 border-b flex items-center justify-between">
+                        <h2 id="modal-title" class="text-lg font-semibold">Add Alternatives</h2>
+                        <button data-testid="close-button"
+                                aria-label="Close"
+                                class="text-gray-400 hover:text-gray-600 text-2xl leading-none w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100"
+                                onclick="closeModal()">
+                            &times;
+                        </button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="p-4 border-b">
+                        <input type="text"
+                               data-testid="search-input"
+                               aria-labelledby="search-label"
+                               class="w-full px-4 py-2 border rounded-lg min-h-[44px]"
+                               placeholder="Search for products..."
+                               oninput="handleSearch(this.value)">
+                        <label id="search-label" class="sr-only">Search for products</label>
+
+                        <!-- Store filters -->
+                        <div class="mt-3 flex gap-4">
+                            <label class="flex items-center">
+                                <input type="checkbox"
+                                       data-testid="store-filter-woolworths"
+                                       checked
+                                       class="mr-2"
+                                       onchange="handleFilterChange()">
+                                Woolworths
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox"
+                                       data-testid="store-filter-coles"
+                                       checked
+                                       class="mr-2"
+                                       onchange="handleFilterChange()">
+                                Coles
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox"
+                                       data-testid="store-filter-iga"
+                                       checked
+                                       class="mr-2"
+                                       onchange="handleFilterChange()">
+                                IGA
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox"
+                                       data-testid="store-filter-aldi"
+                                       checked
+                                       class="mr-2"
+                                       onchange="handleFilterChange()">
+                                Aldi
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Search Results (scrollable) -->
+                    <div data-testid="results-container" class="flex-1 overflow-y-auto p-4">
+                        <div data-testid="search-results" id="search-results">
+                            <!-- Results will be rendered here -->
+                        </div>
+
+                        <!-- No results message -->
+                        <div data-testid="no-results-message" id="no-results-message" class="hidden text-center py-8 text-gray-500">
+                            No products found
+                        </div>
+                    </div>
+
+                    <!-- Footer with selection controls -->
+                    <div data-testid="modal-footer" class="p-4 border-t flex items-center justify-between">
+                        <span data-testid="selection-count" aria-live="polite" class="text-sm text-gray-600">
+                            <span id="selection-count-value">0</span> selected
+                        </span>
+                        <div class="flex gap-2">
+                            <button data-testid="cancel-button"
+                                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px]"
+                                    onclick="closeModal()">
+                                Cancel
+                            </button>
+                            <button data-testid="add-selected-button"
+                                    id="add-selected-button"
+                                    class="hidden px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors min-h-[44px]"
+                                    onclick="addSelectedItems()">
+                                Add Alternatives (0)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Mock product database
+        const mockProducts = [
+            { id: '1', name: 'Full Cream Milk 2L', store: 'woolworths', price: 4.50, url: 'https://via.placeholder.com/48' },
+            { id: '2', name: 'Skim Milk 2L', store: 'coles', price: 4.20, url: 'https://via.placeholder.com/48' },
+            { id: '3', name: 'Whole Milk 2L', store: 'iga', price: 4.80, url: 'https://via.placeholder.com/48' },
+            { id: '4', name: 'Organic Milk 2L', store: 'woolworths', price: 6.00, url: 'https://via.placeholder.com/48' },
+            { id: '5', name: 'Lactose Free Milk 2L', store: 'aldi', price: 3.99, url: 'https://via.placeholder.com/48' },
+            { id: '6', name: 'Bread White 700g', store: 'woolworths', price: 3.50, url: 'https://via.placeholder.com/48' },
+            { id: '7', name: 'Bread Wholemeal 700g', store: 'coles', price: 3.30, url: 'https://via.placeholder.com/48' },
+            { id: '8', name: 'Bread Sourdough 700g', store: 'iga', price: 5.00, url: 'https://via.placeholder.com/48' },
+            { id: '9', name: 'Bread Multigrain 700g', store: 'aldi', price: 2.99, url: 'https://via.placeholder.com/48' },
+            { id: '10', name: 'Almond Milk 1L', store: 'woolworths', price: 3.50, url: 'https://via.placeholder.com/48' },
+        ];
+
+        // Get excluded items from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const excludedParam = urlParams.get('excluded') || '';
+        const mainItemParam = urlParams.get('mainItem') || '';
+        const alternativesParam = urlParams.get('alternatives') || '';
+
+        const excludedItems = [
+            ...excludedParam.split(',').filter(Boolean),
+            ...mainItemParam.split(',').filter(Boolean),
+            ...alternativesParam.split(',').filter(Boolean)
+        ];
+
+        // Selection state
+        let selectedItems = new Map();
+        let currentSearchResults = [];
+        let addedAlternatives = [];
+
+        // Open modal
+        function openModal() {
+            const overlay = document.querySelector('[data-testid="modal-overlay"]');
+            overlay.classList.remove('hidden');
+
+            // Reset selection
+            selectedItems.clear();
+            updateSelectionUI();
+
+            // Focus search input
+            setTimeout(() => {
+                document.querySelector('[data-testid="search-input"]').focus();
+            }, 100);
+
+            // Render initial results
+            renderSearchResults(mockProducts);
+        }
+
+        // Close modal
+        function closeModal() {
+            const overlay = document.querySelector('[data-testid="modal-overlay"]');
+            overlay.classList.add('hidden');
+
+            // Reset state
+            selectedItems.clear();
+            currentSearchResults = [];
+            document.querySelector('[data-testid="search-input"]').value = '';
+        }
+
+        // Handle search
+        function handleSearch(query) {
+            if (!query.trim()) {
+                renderSearchResults(mockProducts);
+                return;
+            }
+
+            const results = mockProducts.filter(product =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+
+            renderSearchResults(results);
+        }
+
+        // Handle filter change
+        function handleFilterChange() {
+            const woolworthsChecked = document.querySelector('[data-testid="store-filter-woolworths"]').checked;
+            const colesChecked = document.querySelector('[data-testid="store-filter-coles"]').checked;
+            const igaChecked = document.querySelector('[data-testid="store-filter-iga"]').checked;
+            const aldiChecked = document.querySelector('[data-testid="store-filter-aldi"]').checked;
+
+            const enabledStores = [];
+            if (woolworthsChecked) enabledStores.push('woolworths');
+            if (colesChecked) enabledStores.push('coles');
+            if (igaChecked) enabledStores.push('iga');
+            if (aldiChecked) enabledStores.push('aldi');
+
+            const searchQuery = document.querySelector('[data-testid="search-input"]').value;
+            let results = mockProducts.filter(product =>
+                enabledStores.includes(product.store) &&
+                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            renderSearchResults(results);
+        }
+
+        // Render search results
+        function renderSearchResults(results) {
+            currentSearchResults = results;
+            const container = document.getElementById('search-results');
+            const noResultsMsg = document.getElementById('no-results-message');
+
+            if (results.length === 0) {
+                container.innerHTML = '';
+                noResultsMsg.classList.remove('hidden');
+                return;
+            }
+
+            noResultsMsg.classList.add('hidden');
+
+            container.innerHTML = results.map((product, index) => {
+                const key = `${product.store}_${product.id}`;
+                const isExcluded = excludedItems.includes(key);
+                const isSelected = selectedItems.has(key);
+                const highlightClass = isSelected ? 'bg-blue-50 border-l-4 border-blue-500' : 'hover:bg-gray-50';
+                const testId = isExcluded ? 'search-result-excluded' : (key === mainItemParam ? 'search-result-main' : `search-result-${index}`);
+
+                return `
+                    <div class="flex items-center gap-3 p-3 border-b cursor-pointer ${highlightClass}"
+                         data-testid="${testId}"
+                         data-item-key="${key}"
+                         onclick="toggleItemSelection('${key}', ${isExcluded})">
+
+                        <img src="${product.url}"
+                             alt="${product.name}"
+                             data-testid="result-image-${index}"
+                             class="w-12 h-12 object-cover rounded"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><rect width=%2248%22 height=%2248%22 fill=%22%23ccc%22/><text x=%2224%22 y=%2234%22 text-anchor=%22middle%22 font-size=%2224%22>📦</text></svg>';">
+
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-sm">${product.name}</div>
+                            <div class="text-xs text-gray-600" data-testid="store-label">
+                                ${product.store.charAt(0).toUpperCase() + product.store.slice(1)} • $${product.price.toFixed(2)}
+                            </div>
+                        </div>
+
+                        ${isSelected ? `
+                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle item selection
+        function toggleItemSelection(key, isExcluded) {
+            if (isExcluded) {
+                showToast('Item already in your list', 'warning');
+                return;
+            }
+
+            if (selectedItems.has(key)) {
+                selectedItems.delete(key);
+            } else {
+                const product = mockProducts.find(p => `${p.store}_${p.id}` === key);
+                if (product) {
+                    selectedItems.set(key, product);
+                }
+            }
+
+            updateSelectionUI();
+            renderSearchResults(currentSearchResults);
+        }
+
+        // Update selection UI
+        function updateSelectionUI() {
+            const count = selectedItems.size;
+            const countElement = document.getElementById('selection-count-value');
+            const addButton = document.getElementById('add-selected-button');
+
+            countElement.textContent = count;
+
+            if (count === 0) {
+                addButton.classList.add('hidden');
+            } else {
+                addButton.classList.remove('hidden');
+                const label = count === 1 ? 'Alternative' : 'Alternatives';
+                addButton.textContent = `Add ${label} (${count})`;
+            }
+        }
+
+        // Add selected items
+        function addSelectedItems() {
+            if (selectedItems.size === 0) {
+                showToast('Please select at least one item', 'warning');
+                return;
+            }
+
+            // Add to alternatives list
+            selectedItems.forEach(item => {
+                addedAlternatives.push(item);
+            });
+
+            // Update badge
+            const altBadge = document.getElementById('alt-count');
+            altBadge.textContent = addedAlternatives.length;
+
+            // Close modal
+            closeModal();
+
+            // Show success message
+            showToast(`Added ${selectedItems.size} alternative${selectedItems.size > 1 ? 's' : ''}`, 'success');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+
+            const bgColors = {
+                info: 'bg-blue-500',
+                warning: 'bg-orange-500',
+                success: 'bg-green-500',
+                error: 'bg-red-500'
+            };
+
+            const bgColor = bgColors[type] || bgColors.info;
+
+            const toast = document.createElement('div');
+            toast.setAttribute('data-testid', `${type}-toast`);
+            toast.className = `fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${bgColor} text-white animate-fade-in`;
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const overlay = document.querySelector('[data-testid="modal-overlay"]');
+                if (!overlay.classList.contains('hidden')) {
+                    closeModal();
+                }
+            }
+        });
+
+        // Close modal on overlay click
+        document.querySelector('[data-testid="modal-overlay"]').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeModal();
+            }
+        });
+
+        // Handle Enter key on search results
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const focused = document.activeElement;
+                if (focused && focused.hasAttribute('data-item-key')) {
+                    const key = focused.getAttribute('data-item-key');
+                    const isExcluded = excludedItems.includes(key);
+                    toggleItemSelection(key, isExcluded);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

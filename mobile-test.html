@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Onboarding Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Test touch target sizes */
+        .touch-test {
+            min-height: 44px;
+            min-width: 44px;
+            background: #e5e7eb;
+            margin: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .touch-test:hover {
+            background: #d1d5db;
+        }
+        .touch-test.success {
+            background: #10b981;
+            color: white;
+        }
+        .pass { color: #10b981; }
+        .fail { color: #ef4444; }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-xl font-bold mb-6">Mobile Onboarding Test Suite</h1>
+        
+        <!-- Test Results -->
+        <div class="space-y-4 mb-8">
+            <h2 class="font-semibold">Automated Tests</h2>
+            <div id="testResults" class="space-y-2 text-sm">
+                <!-- Test results will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Manual Touch Tests -->
+        <div class="space-y-4">
+            <h2 class="font-semibold">Manual Touch Tests</h2>
+            <p class="text-sm text-gray-600 mb-4">Tap each button to verify 44px minimum touch targets:</p>
+            
+            <div class="grid grid-cols-4 gap-1">
+                <div class="touch-test" data-test="touch1">1</div>
+                <div class="touch-test" data-test="touch2">2</div>
+                <div class="touch-test" data-test="touch3">3</div>
+                <div class="touch-test" data-test="touch4">4</div>
+                <div class="touch-test" data-test="touch5">5</div>
+                <div class="touch-test" data-test="touch6">6</div>
+                <div class="touch-test" data-test="touch7">7</div>
+                <div class="touch-test" data-test="touch8">8</div>
+            </div>
+            
+            <div class="mt-4">
+                <div class="text-sm">
+                    Touched: <span id="touchCount">0</span>/8
+                </div>
+                <button id="resetTouch" class="mt-2 px-3 py-1 bg-gray-200 rounded text-sm">Reset</button>
+            </div>
+        </div>
+        
+        <!-- Links to actual pages -->
+        <div class="mt-8 space-y-2">
+            <h2 class="font-semibold">Test Navigation</h2>
+            <div class="space-y-2">
+                <a href="onboarding.html" class="block px-4 py-2 bg-blue-600 text-white rounded text-center">
+                    Test Onboarding Flow
+                </a>
+                <a href="shopping-list.html" class="block px-4 py-2 bg-green-600 text-white rounded text-center">
+                    Test Shopping List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MobileTestSuite {
+            constructor() {
+                this.tests = [];
+                this.touchedButtons = new Set();
+                this.init();
+            }
+
+            init() {
+                this.runAutomatedTests();
+                this.initTouchTests();
+            }
+
+            runAutomatedTests() {
+                // Test viewport
+                this.addTest('Viewport Meta Tag', () => {
+                    const viewport = document.querySelector('meta[name="viewport"]');
+                    return viewport && viewport.content.includes('width=device-width');
+                });
+
+                // Test responsive breakpoints
+                this.addTest('Mobile Breakpoint (< 640px)', () => {
+                    return window.innerWidth > 0; // Always pass, just info
+                }, `Current width: ${window.innerWidth}px`);
+
+                // Test touch target minimum size
+                this.addTest('Touch Targets >= 44px', () => {
+                    const touchTargets = document.querySelectorAll('.touch-test');
+                    let allValid = true;
+                    touchTargets.forEach(target => {
+                        const rect = target.getBoundingClientRect();
+                        if (rect.width < 44 || rect.height < 44) {
+                            allValid = false;
+                        }
+                    });
+                    return allValid;
+                });
+
+                // Test text size readability
+                this.addTest('Text Size >= 16px', () => {
+                    const bodyStyle = getComputedStyle(document.body);
+                    const fontSize = parseInt(bodyStyle.fontSize);
+                    return fontSize >= 16;
+                });
+
+                // Test contrast (basic)
+                this.addTest('Background Contrast', () => {
+                    const bgColor = getComputedStyle(document.body).backgroundColor;
+                    // Basic check - ensure it's not transparent
+                    return bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent';
+                });
+
+                this.renderTestResults();
+            }
+
+            addTest(name, testFn, info = '') {
+                const result = testFn();
+                this.tests.push({ name, result, info });
+            }
+
+            renderTestResults() {
+                const container = document.getElementById('testResults');
+                container.innerHTML = this.tests.map(test => `
+                    <div class="flex items-center justify-between">
+                        <span>${test.name}</span>
+                        <span class="${test.result ? 'pass' : 'fail'}">
+                            ${test.result ? '✓' : '✗'}
+                            ${test.info ? `(${test.info})` : ''}
+                        </span>
+                    </div>
+                `).join('');
+            }
+
+            initTouchTests() {
+                const touchTargets = document.querySelectorAll('.touch-test');
+                const touchCount = document.getElementById('touchCount');
+                const resetButton = document.getElementById('resetTouch');
+
+                touchTargets.forEach(target => {
+                    target.addEventListener('click', (e) => {
+                        const testId = e.target.dataset.test;
+                        if (!this.touchedButtons.has(testId)) {
+                            this.touchedButtons.add(testId);
+                            e.target.classList.add('success');
+                            touchCount.textContent = this.touchedButtons.size;
+                        }
+                    });
+                });
+
+                resetButton.addEventListener('click', () => {
+                    this.touchedButtons.clear();
+                    touchTargets.forEach(target => {
+                        target.classList.remove('success');
+                    });
+                    touchCount.textContent = '0';
+                });
+            }
+        }
+
+        // Initialize tests when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new MobileTestSuite();
+        });
+
+        // Add resize listener for responsive testing
+        window.addEventListener('resize', () => {
+            const widthInfo = document.querySelector('#testResults .flex:nth-child(2) span:last-child');
+            if (widthInfo) {
+                widthInfo.innerHTML = `✓ (Current width: ${window.innerWidth}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

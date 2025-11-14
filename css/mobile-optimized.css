@@ -1,0 +1,344 @@
+/* Mobile-First One-Handed Operation Optimizations */
+
+/* Thumb-friendly zone optimization (bottom 2/3 of screen) */
+.thumb-zone {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary action buttons - bottom right for right-handed users */
+.primary-actions {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 50;
+}
+
+.primary-actions button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+}
+
+.primary-actions button:active {
+    transform: scale(0.95);
+}
+
+/* Floating action button for in-store mode toggle */
+.fab-toggle {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+}
+
+.fab-toggle.active {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+/* One-handed navigation - accessible area */
+.one-handed-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: white;
+    border-top: 2px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 45;
+}
+
+.one-handed-nav button {
+    min-width: 64px;
+    min-height: 64px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    touch-action: manipulation;
+    transition: all 0.2s ease;
+}
+
+.one-handed-nav button:active {
+    background: #f3f4f6;
+    transform: scale(0.95);
+}
+
+/* Swipe gestures for secondary actions */
+.swipe-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.swipe-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, #f59e0b);
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.swipe-container.swiped .swipe-actions {
+    transform: translateX(0);
+}
+
+.swipe-actions button {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Large, accessible touch targets for in-store mode */
+.in-store-mode .touch-target {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0.75rem;
+}
+
+/* Optimized for cart-friendly scrolling */
+.cart-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Prevent accidental zooming during shopping */
+.no-zoom {
+    touch-action: pan-x pan-y;
+    user-select: none;
+}
+
+/* Compact header for maximum list space */
+.compact-header {
+    padding: 0.75rem 1rem;
+    background: #1f2937;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.compact-header h1 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+/* Quick access toolbar */
+.quick-toolbar {
+    position: sticky;
+    top: 60px; /* Below compact header */
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 25;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.quick-toolbar button {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    touch-action: manipulation;
+}
+
+.quick-toolbar button.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* Emergency sharing button - always accessible */
+.emergency-share {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    z-index: 55;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.emergency-share:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Responsive breakpoints for one-handed optimization */
+@media (max-width: 640px) {
+    /* Mobile-first optimizations */
+    .shopping-item {
+        margin-bottom: 0.75rem;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    /* Bottom padding to account for floating elements */
+    .main-content {
+        padding-bottom: 160px; /* Space for FABs and nav */
+    }
+    
+    /* Larger text for readability while moving */
+    .product-name {
+        font-size: 1.25rem !important;
+        line-height: 1.4;
+    }
+    
+    .product-price {
+        font-size: 1.5rem !important;
+        font-weight: bold;
+    }
+    
+    /* Simplified layout for cart-friendly use */
+    .simplified-layout .secondary-info {
+        display: none;
+    }
+    
+    .simplified-layout .product-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens - optimize for one-handed use */
+    .primary-actions {
+        bottom: 0.75rem;
+        right: 0.75rem;
+    }
+    
+    .one-handed-nav {
+        height: 72px;
+    }
+    
+    .one-handed-nav button {
+        min-width: 56px;
+        min-height: 56px;
+    }
+    
+    /* Reduce cognitive load */
+    .quick-toolbar {
+        display: none; /* Hide on very small screens */
+    }
+}
+
+/* Landscape mode optimizations for phones */
+@media (max-height: 500px) and (orientation: landscape) {
+    .compact-header {
+        padding: 0.5rem 1rem;
+    }
+    
+    .compact-header h1 {
+        font-size: 1rem;
+    }
+    
+    .primary-actions {
+        flex-direction: row;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        left: auto;
+    }
+    
+    .one-handed-nav {
+        height: 56px;
+    }
+}
+
+/* High contrast mode for bright store lighting */
+@media (prefers-contrast: high) {
+    .shopping-item {
+        border: 2px solid #000;
+        background: #fff;
+    }
+    
+    .item-checkbox {
+        border: 3px solid #000;
+        background: #fff;
+    }
+    
+    .product-name {
+        color: #000;
+        font-weight: bold;
+    }
+}
+
+/* Reduced motion for users with vestibular disorders */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01s !important;
+        transition-duration: 0.01s !important;
+    }
+    
+    .checkmark-animation {
+        animation: none;
+    }
+}
+
+/* Large text mode */
+@media (prefers-reduced-data: reduce) {
+    .product-image {
+        display: none; /* Save data by hiding images */
+    }
+    
+    .product-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}

@@ -19,221 +19,92 @@
  <div class="flex justify-center gap-4 py-2 font-bold text-primary border border-primary/50 lg:rounded-b-xl">
     <a href="index.html">Search</a>
     <a href="changes.html">Price changes</a>
-    <a href="shopping-list.html">Shopping List</a>
+    <a href="shopping-list.html">Shopping Lists</a>
 </div>
 
-<div class="w-full relative px-3 sm:px-4 flex-grow">
-    <!-- Mobile-friendly header -->
-    <div class="text-center py-4 sm:py-8">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">Smart Shopping List</h1>
-        <p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Find alternatives and save money across stores</p>
-        
-        <!-- Cart Selector Component with Import/Export -->
-        <div class="max-w-2xl mx-auto mb-6">
-            <cart-selector x-id="cartSelector" class="block mb-4"></cart-selector>
-            
-            <!-- Import/Export buttons prominently placed near cart selector -->
-            <div class="flex justify-center gap-3">
-                <button x-id="mainImportBtn" class="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
-                    📥 Import Shopping List
-                </button>
-                <button x-id="mainExportBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
-                    📤 Export Shopping List
-                </button>
-            </div>
+<div class="w-full max-w-3xl mx-auto px-4 py-8">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Shopping Lists</h1>
+        <div class="flex gap-2">
+            <button id="importHeaderBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors min-h-[44px] flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                <span class="hidden sm:inline">Import</span>
+            </button>
+            <button id="newListBtn" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition-colors min-h-[44px]">
+                + New List
+            </button>
         </div>
     </div>
 
-    <!-- Shopping Strategy Component (positioned at top for immediate visibility of savings) -->
-    <shopping-strategy x-id="shoppingStrategyComponent" class="hidden mb-6 sm:mb-8"></shopping-strategy>
-
-    <!-- Empty state -->
-    <div x-id="noItems" class="hidden block text-center my-6 sm:my-8 p-6 sm:p-8 bg-gray-50 rounded-lg">
-        <div class="text-3xl sm:text-4xl mb-3 sm:mb-4">🛒</div>
-        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Your shopping list is empty</h3>
-        <p class="text-sm sm:text-base text-gray-600 mb-4">Search for products below and add them to your list</p>
-        
-        
-        <div class="text-xs sm:text-sm text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-200">
-            💡 After adding items, tap "Add Alternative" to find better deals at other stores!
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16">
+        <div class="text-6xl mb-4">📝</div>
+        <h2 class="text-xl font-semibold mb-2">No Lists Yet</h2>
+        <p class="text-gray-600 mb-6">Create your first shopping list to get started</p>
+        <div class="flex gap-3 justify-center">
+            <button id="createFirstBtn" class="px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition-colors min-h-[44px]">
+                + Create First List
+            </button>
+            <button id="importFirstBtn" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors min-h-[44px] flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Import_List
+            </button>
         </div>
     </div>
 
-    <!-- Enhanced Cart Items Container -->
-    <div x-id="enhancedCartContainer" class="mb-6 sm:mb-8">
-        <!-- Mobile-first shopping list layout -->
-        <div class="hidden">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center gap-2">
-                    <div class="text-sm text-gray-600 px-2 py-1 bg-gray-100 rounded" x-id="itemCountMobile">0 items</div>
-                    <button x-id="mobileExportBtn" class="text-xs px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors" title="Export list">
-                        📤
-                    </button>
-                    <button x-id="mobileImportBtn" class="text-xs px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded transition-colors" title="Import list">
-                        📥
-                    </button>
-                </div>
-            </div>
-            <!-- Mobile Collapsible Shopping Lists Container -->
-            <div x-id="mobileShoppingListsContainer" class="space-y-4">
-                <!-- Mobile collapsible shopping lists will be rendered here -->
-            </div>
-            <!-- Legacy mobile container for backward compatibility -->
-            <div x-id="mobileShoppingCards" class="space-y-3 hidden">
-                <!-- Legacy mobile shopping cards will be rendered here -->
-            </div>
-        </div>
-        
-        <!-- Desktop split layout: Shopping lists + Alternative panel -->
-        <div class="flex gap-6">
-            <!-- Left: Shopping lists (60%) -->
-            <div class="flex-1 w-3/5">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-900">Your Shopping Lists</h2>
-                    <div class="flex items-center gap-4">
-                        <button class="text-xs text-blue-600 hover:text-blue-800" onclick="alert('Click any item to manage alternatives in the side panel. No more scrolling!')">
-                            ❓ How it works
-                        </button>
-                    </div>
-                </div>
-                <!-- Desktop Collapsible Shopping Lists Container -->
-                <div x-id="desktopShoppingListsContainer" class="space-y-4">
-                    <!-- Desktop collapsible shopping lists will be rendered here -->
-                </div>
-                <!-- Legacy desktop container for backward compatibility -->
-                <div x-id="desktopShoppingCards" class="space-y-3 hidden">
-                    <!-- Legacy desktop shopping cards will be rendered here -->
-                </div>
-            </div>
-            
-            <!-- Right: Alternative management panel (40%) -->
-            <div x-id="alternativePanelContainer" class="w-2/5 bg-white border border-gray-200 rounded-lg shadow-sm" style="display: none;">
-                <alternative-panel x-id="alternativePanel"></alternative-panel>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile-friendly Product Search - moved here for better UX -->
-    <div class="mb-6 sm:mb-8">
-        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-            <span class="text-green-600">🔍</span>
-            Add Products to Your List
-        </h3>
-        <items-filter
-            x-id="productsFilter"
-            stores
-            misc
-            nochartclear
-            placeholder="Search for products (e.g. milk, bread, eggs)..."
-            class="mb-3 sm:mb-4"
-        ></items-filter>
-        <items-list x-id="productsList" add multiselect class="mobile-product-list"></items-list>
-    </div>
-
-    <!-- Enhanced Cost Summary Component -->
-    <cost-summary x-id="costSummaryComponent" class="hidden"></cost-summary>
-
-    <!-- Legacy Cost Summary (kept for backward compatibility) -->
-    <div x-id="costSummary" class="hidden mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
-        <h3 class="text-lg font-semibold text-blue-900 mb-4">Cost Summary</h3>
-        <div class="grid md:grid-cols-3 gap-4">
-            <div class="text-center">
-                <div class="text-2xl font-bold text-blue-700" x-id="currentTotal">$0.00</div>
-                <div class="text-sm text-blue-600">Current Selection</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-green-700" x-id="bestTotal">$0.00</div>
-                <div class="text-sm text-green-600">Best Possible</div>
-            </div>
-            <div class="text-center">
-                <div class="text-2xl font-bold text-purple-700" x-id="potentialSavings">$0.00</div>
-                <div class="text-sm text-purple-600">Potential Savings</div>
-            </div>
-        </div>
-    </div>
-
-    <div x-id="loader" class="progress-bar-container mx-auto mt-8">
-    <div class="progress-bar"></div>
+    <!-- Lists Container -->
+    <div id="listsContainer" class="space-y-4"></div>
 </div>
 
+<!-- New List Modal -->
+<div id="newListModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg w-full max-w-md m-4 p-6">
+        <h2 class="text-xl font-semibold mb-4">New Shopping List</h2>
 
-    
-    <!-- Alternative Search Modal (hidden by default) -->
-    <alternative-search x-id="alternativeSearchModal" class="hidden"></alternative-search>
-    
-    <!-- Hidden file input for import functionality -->
-    <input type="file" x-id="importFileInput" accept=".json" class="hidden">
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-2">List Name</label>
+            <input type="text" id="listNameInput" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="My Shopping List">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium mb-2">Select Stores</label>
+            <div class="space-y-2">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" value="woolies" class="store-checkbox w-5 h-5">
+                    <span>Woolworths</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" value="coles" class="store-checkbox w-5 h-5">
+                    <span>Coles</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" value="aldi" class="store-checkbox w-5 h-5">
+                    <span>ALDI</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" value="iga" class="store-checkbox w-5 h-5">
+                    <span>IGA</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="flex gap-2 justify-end">
+            <button id="cancelBtn" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px]">
+                Cancel
+            </button>
+            <button id="createBtn" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition-colors min-h-[44px]">
+                Create List
+            </button>
+        </div>
+    </div>
 </div>
 
-<!-- Development Test Section (remove in production) -->
-<div id="devTestSection" class="hidden fixed bottom-4 right-4 p-2 bg-gray-800 text-white text-xs rounded shadow-lg">
-    <button id="testIntegration" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs">
-        Test Integration
-    </button>
-</div>
-
-<style>
-/* Collapsible Cart Styling */
-.collapsible-cart {
-    display: block;
-    margin-bottom: 1rem;
-}
-
-.cart-header {
-    cursor: pointer;
-    padding: 1rem;
-    transition: background-color 0.2s ease;
-}
-
-.cart-header:hover {
-    background-color: #f9fafb;
-}
-
-/* Collapsible Cart Transitions */
-.cart-items-container {
-    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
-    overflow: hidden;
-}
-
-.cart-items-container.hidden {
-    max-height: 0;
-    opacity: 0;
-}
-
-.chevron-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease-in-out;
-    color: #6b7280; /* gray-500 */
-}
-
-.chevron-icon svg {
-    transition: transform 0.2s ease-in-out;
-}
-
-/* Collapsed state: right-pointing chevron (0 degrees) */
-.collapsible-cart[data-collapsed="true"] .chevron-icon svg {
-    transform: rotate(0deg);
-}
-
-/* Expanded state: down-pointing chevron (90 degrees) */
-.collapsible-cart[data-collapsed="false"] .chevron-icon svg {
-    transform: rotate(90deg);
-}
-
-/* Mobile-friendly touch targets */
-@media (max-width: 640px) {
-    .cart-header {
-        min-height: 60px;
-    }
-    
-    .cart-export-btn, .cart-delete-btn {
-        min-width: 32px;
-        min-height: 32px;
-    }
-}
-</style>
+<!-- Hidden file input for import -->
+<input type="file" id="import-file-input" accept=".json" class="hidden">
 
 <script src="shopping-list.js"></script>
 
@@ -252,4 +123,4 @@
 </footer>
 </body>
 
-</html> 
+</html>
